@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#007aff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SSP GASTER">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="json/manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<title>SSP MEDICAL — Latihan Soal</title>
+</head>
+<body>
+<main class="app">
+<header class="header">
+  <div class="brand">
+    <div class="logo">SSP</div>
+    <div><h1>Reza FKUY23</h1><p>Latihan Soal • Offline • by Reza23 and AI</p></div>
+  </div>
+  <button id="soundBtn" class="icon-btn" aria-label="Suara">🔊</button>
+  <button id="themeBtn" class="icon-btn" aria-label="Mode gelap" title="Mode gelap">☾</button>
+</header>
+
+<section id="home" class="view active">
+  <div class="hero">
+    <div class="eyebrow">MEDICAL QUIZ</div>
+    <h2>Belajar lebih cepat.</h2>
+    <p>Don't let AI guide you; you are the one who guides the AI. SEBELUM KERJAIN SOAL BACA MATERI PPT DULU. and leave your message here https://forms.gle/E4PjrpiZ9C53E2Dj7. </p>
+  </div>
+
+  <div class="character-widget card" id="characterWidget">
+    <button type="button" class="character-open" id="characterOpen" aria-label="Buka karakter">
+      <div class="character-mini" id="characterMini"></div>
+      <span class="character-caption">⚔️ Karakter</span>
+    </button>
+  </div>
+
+  <div class="card player-card">
+    <div class="player-top">
+      <div>
+        <div class="eyebrow">PLAYER PROGRESS</div>
+        <div class="player-level"><span id="levelBadge">Lv. 1</span><b id="xpTitle">Noob</b><span id="characterNameDisplay" class="character-name-display">Belum diberi nama</span></div>
+      </div>
+      <div class="xp-total"><b id="xpTotal">0 XP</b><span>Total XP</span></div>
+    </div>
+    <div class="xp-track"><i id="xpBar"></i></div>
+    <div class="xp-meta"><span id="xpProgressText">0 / 100 XP</span><span id="xpNextText">100 XP ke Level 2</span></div>
+    <div class="player-badges" id="playerBadges"></div>
+  </div>
+
+  <div id="resumeCard" class="card resume-card" hidden>
+    <div class="section-title">Kuis tersimpan</div>
+    <div id="resumeText" class="muted"></div>
+    <div class="resume-actions">
+      <button class="primary" id="resumeBtn">Lanjutkan →</button>
+      <button class="secondary small-btn" id="discardResumeBtn">Hapus</button>
+    </div>
+  </div>
+
+  <div class="card bank-card">
+    <div class="section-title">📚 Pilih Bank Soal</div>
+    <div class="bank-grid" id="bankChoices"></div>
+    <div class="bank-note" id="bankNote"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="countChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="modeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="timeChoices"></div>
+    <button class="primary" id="startBtn">Mulai Kuis →</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="totalStat">0</b><span>Total soal</span></div>
+    <div class="stat"><b id="bookmarkStat">0</b><span>Bookmark</span></div>
+    <div class="stat"><b id="historyStat">0</b><span>Riwayat</span></div>
+    <div class="stat"><b id="bestStat">0%</b><span>Nilai terbaik</span></div>
+  </div>
+
+  <div class="card menu-card">
+    <div class="section-title">Menu</div>
+    <div class="menu-grid">
+      <button class="secondary" id="bookmarksBtn">🔖 Soal Bookmark</button>
+      <button class="secondary" id="historyBtn">📊 Riwayat Skor</button>
+      <button class="secondary" id="wrongBtn">❌ Soal yang Sering Salah</button>
+      <button class="secondary" id="analyticsBtn">📈 Analitik Belajar</button>
+      <button class="secondary" id="quickWrongBtn">🎯 Latihan Soal Salah</button>
+    </div>
+  </div>
+</section>
+
+<div id="characterModal" class="modal-backdrop" hidden>
+  <div class="character-modal card" role="dialog" aria-modal="true" aria-labelledby="characterModalTitle">
+    <div class="section-title" id="characterModalTitle">⚔️ Karakter & Gear</div>
+    <div class="character-preview" id="characterPreview"></div>
+    <label class="character-name-label" for="characterNameInput">Nama karakter</label>
+    <div class="character-name-row">
+      <input id="characterNameInput" class="character-name-input" type="text" maxlength="24" placeholder="Masukkan nama karakter" autocomplete="off">
+      <button type="button" class="primary small-btn" id="saveCharacterName">Simpan</button> <button type="button" class="secondary small-btn" id="resetCharacterName">Hapus Nama</button>
+    </div>
+    <div class="gender-title">Pilih gender</div>
+    <div class="gender-grid">
+      <button type="button" class="choice gender-choice" data-gender="male">♂️ Laki-laki</button>
+      <button type="button" class="choice gender-choice" data-gender="female">♀️ Perempuan</button>
+    </div>
+    <div class="gear-summary" id="gearSummary"></div>
+    <button type="button" class="secondary" id="closeCharacter">Tutup</button>
+  </div>
+</div>
+
+<section id="quiz" class="view">
+  <div class="card quiz-card">
+    <div class="topline">
+      <button class="back" id="quizBack">‹ Beranda</button>
+      <button class="bookmark" id="bookmarkBtn">☆ Simpan</button>
+    </div>
+    <div class="topline compact">
+      <span class="info" id="info">Soal 1</span>
+      <span class="live-stats"><span id="timerLive" class="timer-pill">⏱ 00:00</span><span id="streakLive"></span><span id="scoreLive" class="muted">0 benar</span><span id="xpLive" class="xp-live">⚡ 0 XP</span></span>
+    </div>
+    <div class="battle-hud" aria-label="HP pemain">
+      <div class="hp-head"><span>❤️ HP</span><b id="hpText">100 / 100</b></div>
+      <div class="hp-track"><i id="hpBar"></i></div>
+      <small id="damageHint">Damage dasar menyesuaikan jumlah soal</small>
+    </div>
+    <div class="progress" aria-label="Progress"><i id="progress"></i></div>
+    <div class="question" id="question">Memuat soal…</div>
+    <div class="answers" id="answers"></div>
+    <div class="explain" id="explain">
+      <div id="explainText"></div>
+    </div>
+    <div class="quiz-actions">
+      <button class="secondary" id="prevBtn" style="display:none">← Soal Sebelumnya</button>
+      <button class="secondary" id="nextBtn" style="display:none">Selanjutnya →</button>
+    </div>
+    <div class="quiz-foot-actions">
+      <button class="text-btn" id="flagBtn">⚑ Tandai soal</button>
+      <span id="flagState" class="muted"></span>
+    </div>
+  </div>
+</section>
+
+<section id="result" class="view">
+  <div class="card">
+    <div class="result-score">
+      <div class="eyebrow">HASIL KUIS</div>
+      <div class="big" id="resultScore">0%</div>
+      <p id="resultDetail" class="muted">0 benar dari 0 soal</p>
+      <div class="grade-pill" id="resultGrade">—</div>
+      <div class="bar"><i id="resultBar"></i></div>
+    </div>
+    <div class="result-xp-card">
+      <div><span>⚡ XP Didapat</span><b id="resultXP">+0 XP</b></div>
+      <div><span>🏆 Level</span><b id="resultLevel">Lv. 1</b></div>
+    </div>
+    <div class="result-grid">
+      <div><b id="resultCorrect">0</b><span>Benar</span></div>
+      <div><b id="resultWrong">0</b><span>Salah</span></div>
+      <div><b id="resultTotal">0</b><span>Total</span></div>
+    </div>
+    <button class="primary" id="againBtn">Kuis Lagi</button>
+    <div class="result-actions">
+      <button class="secondary" id="reviewWrongBtn">❌ Review Soal Salah</button>
+      <button class="secondary" id="reviewQuizBtn">📚 Lihat Pembahasan</button>
+      <button class="secondary" id="resultHome">Kembali ke Beranda</button>
+    </div>
+  </div>
+</section>
+
+<section id="bookmarks" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🔖 Bookmark</b></div>
+    <div id="bookmarkList"></div>
+  </div>
+</section>
+
+<section id="wrong" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>❌ Soal yang Sering Salah</b></div>
+    <div id="wrongSummary" class="history-summary"></div>
+    <div id="wrongList"></div>
+  </div>
+</section>
+
+<section id="review" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📚 Review Pembahasan</b></div>
+    <div id="reviewSummary" class="muted"></div>
+    <div id="reviewList"></div>
+  </div>
+</section>
+
+<section id="analytics" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📈 Analitik Belajar</b></div>
+    <div id="analyticsSummary" class="history-summary"></div>
+    <div id="analyticsCards" class="analytics-grid"></div>
+    <div class="section-title sub-title">Performa per bank</div>
+    <div id="analyticsBanks"></div>
+    <div class="section-title sub-title">Fokus belajar</div>
+    <div id="analyticsFocus"></div>
+  </div>
+</section>
+
+
+
+<section id="history" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📊 Riwayat Skor</b></div>
+    <div id="historySummary" class="history-summary"></div>
+    <div id="historyList"></div>
+    <button class="secondary" id="clearHistory">Hapus riwayat</button>
+  </div>
+</section>
+
+<div class="footer">SSP GASTER • Bank GASTER + PULMONIS • Data tersimpan di perangkat</div>
+</main>
+<script src="js/bank_pulmonis.js"></script>
+<script src="js/bank_2021.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(console.error);
+  });
+}
+</script>
+
+</body>
+</html>
